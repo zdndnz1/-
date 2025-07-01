@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>คำนวณรอบประจำเดือน</title>
+  <style>
+    body { font-family: sans-serif; background: #f5f5f5; padding: 2em; }
+    .box { max-width: 500px; margin: auto; background: white; padding: 2em; border-radius: 1em; box-shadow: 0 0 10px #ccc; }
+    input, button { width: 100%; padding: 0.5em; margin-top: 0.5em; }
+    pre { background: #eee; padding: 1em; border-radius: 0.5em; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h2>คำนวณรอบประจำเดือน</h2>
+  <input id="start" value="2025-06-25" placeholder="วันที่เริ่ม (YYYY-MM-DD)">
+  <input id="cycle" type="number" value="28" placeholder="รอบเดือน (วัน)">
+  <input id="length" type="number" value="5" placeholder="จำนวนวันมีประจำเดือน">
+  <input id="notify" type="number" value="2" placeholder="แจ้งล่วงหน้า (วัน)">
+  <button onclick="calculate()">คำนวณ</button>
+  <pre id="result"></pre>
+</div>
+<script>
+function calculate() {
+  const start = new Date(document.getElementById("start").value);
+  const cycle = parseInt(document.getElementById("cycle").value);
+  const length = parseInt(document.getElementById("length").value);
+  const notify = parseInt(document.getElementById("notify").value);
+
+  const ovulation = new Date(start); ovulation.setDate(ovulation.getDate() + cycle - 14);
+  const next = new Date(start); next.setDate(next.getDate() + cycle);
+  const end = new Date(start); end.setDate(end.getDate() + length);
+  const notifyDate = new Date(ovulation); notifyDate.setDate(ovulation.getDate() - notify);
+
+  const format = (d) => d.toISOString().slice(0, 10);
+  document.getElementById("result").innerText =
+    `📍 วันไข่ตก: ${format(ovulation)}\n📍 หมดรอบเดือน: ${format(end)}\n📍 รอบถัดไป: ${format(next)}\n📍 แจ้งเตือนล่วงหน้า: ${format(notifyDate)}`;
+}
+</script>
+</body>
+</html>
